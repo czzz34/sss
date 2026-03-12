@@ -1,6 +1,8 @@
 name: Build APK
 
-on: [push]
+on:
+  push:
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -10,10 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build with Buildozer
+      - name: Build APK using Buildozer Docker image
+        # uses a prebuilt container with buildozer + Android SDK
         uses: docker://kivy/buildozer
         with:
-          args: buildozer android debug
+          args: bash -lc "yes | buildozer android debug"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

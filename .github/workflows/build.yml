@@ -2,6 +2,7 @@ name: Build APK
 
 on:
   push:
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -11,15 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build APK with Buildozer container
+      - name: Build APK inside kivy/buildozer container
+        # run docker directly so we control entrypoint, stdin, and shell
         run: |
-          docker run --rm \
+          docker run --rm -i \
             --entrypoint /bin/bash \
-            -v ${{ github.workspace }}:/home/user/hostcwd \
-            kivy/buildozer \
-            -lc "cd /home/user/hostcwd && buildozer android debug --allow-root"
+            -v "${{ github.workspace }}":/home/user/hostcwd \
+            kivy/buildozer:latest \
+            -lc "cd /home/user/hostcwd && yes | buildozer android debug --allow-root --verbose"
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: apk

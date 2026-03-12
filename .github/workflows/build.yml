@@ -11,12 +11,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build APK
+      - name: Build APK with Buildozer container
         run: |
           docker run --rm \
-          -v ${{ github.workspace }}:/home/user/hostcwd \
-          kivy/buildozer \
-          bash -c "cd /home/user/hostcwd && yes | buildozer android debug"
+            --entrypoint /bin/bash \
+            -v ${{ github.workspace }}:/home/user/hostcwd \
+            kivy/buildozer \
+            -lc "cd /home/user/hostcwd && buildozer android debug --allow-root"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

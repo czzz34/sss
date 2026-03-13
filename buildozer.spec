@@ -9,7 +9,7 @@ source.include_exts = py,png,kv
 version = 0.1
 
 # Keep requirements minimal
-requirements = python3,kivy,opencv,cv2,app,
+requirements = python3,kivy,opencv,app,
 
 orientation = portrait
 
